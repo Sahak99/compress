@@ -1,6 +1,20 @@
 #include "FileInput.h"
+#include <iostream>
 
-bool FileInput::handleInputFile(const std::string &filename)
+bool FileInput::handleInputFile(const std::string &filename, std::ifstream &ifs)
 {
-    return false;
+    if (filename.empty())
+    {
+        return false;
+    }
+    try
+    {
+        ifs.open(filename);
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << e.what() << std::endl;
+        return false;
+    }
+    return true;
 }
