@@ -1,14 +1,14 @@
 #include "Program.h"
-#include "FileInput.h"
+#include "FileManager.h"
 #include <iostream>
 #include <string>
-#include <fstream>
 
 void Program::run(int argc, char **argv)
 {
-    std::ifstream ifs;
     handleInputArgs(argc, argv);
-    FileInput::handleInputFile(m_inputFile, ifs);
+    FileManager<std::ifstream>::handleFileOpen(m_inputFile, m_ifs);
+    FileManager<std::ofstream>::handleFileOpen(m_outputFile, m_ofs);
+    handleAlgExecution();
 }
 
 void Program::handleInputArgs(int argc, char **argv)
@@ -30,4 +30,21 @@ void Program::handleInputArgs(int argc, char **argv)
             m_algorithm = std::string(argv[i]);
         }
     }
+}
+
+void Program::handleAlgExecution()
+{
+    if (m_algorithm == "-rle" || m_algorithm == "-RLE")
+    {
+        for (std::string inputLine; std::getline(m_ifs, inputLine);)
+        {
+            std::cout << inputLine << std::endl;
+        }
+        // std::string s = executeAlg(&Compress::rle);
+        return;
+    }
+}
+
+std::string Program::executeAlg(std::function<const std::string(const std::string &)>)
+{
 }
