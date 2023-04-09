@@ -1,4 +1,5 @@
 #include <iostream>
+
 class Compress
 {
 public:
