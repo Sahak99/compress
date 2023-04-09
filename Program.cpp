@@ -38,13 +38,14 @@ void Program::handleAlgExecution()
     {
         for (std::string inputLine; std::getline(m_ifs, inputLine);)
         {
-            std::cout << inputLine << std::endl;
+            std::string outputLine = executeAlg(&Compress::rle, inputLine);
+            m_ofs << outputLine << std::endl;
         }
-        // std::string s = executeAlg(&Compress::rle);
         return;
     }
 }
 
-std::string Program::executeAlg(std::function<const std::string(const std::string &)>)
+std::string Program::executeAlg(std::function<const std::string(const std::string &)> func, const std::string &str)
 {
+    return func(str);
 }

@@ -11,7 +11,7 @@ public:
 private:
     void handleInputArgs(int argc, char **argv);
     void handleAlgExecution();
-    std::string executeAlg(std::function<const std::string(const std::string &)>);
+    std::string executeAlg(std::function<const std::string(const std::string &)>, const std::string &str);
 
 private:
     std::string m_inputFile;
