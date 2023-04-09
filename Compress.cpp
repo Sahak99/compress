@@ -1,4 +1,5 @@
 #include "Compress.h"
+#include <cctype>
 
 const std::string Compress::rle(const std::string &str)
 {
@@ -20,5 +21,32 @@ const std::string Compress::rle(const std::string &str)
             prev = str[i];
         }
     }
+    result += std::to_string(count) + prev;
+    return result;
+}
+
+const std::string Compress::drle(const std::string &str)
+{
+    std::string result;
+    std::string num;
+    int strSize = str.length();
+
+    for (int i = 0; i < strSize; ++i)
+    {
+        if (isdigit(str[i]))
+        {
+            num += str[i];
+        }
+        else
+        {
+            int number = stoi(num);
+            while (number-- > 0)
+            {
+                result += str[i];
+            }
+            num = "";
+        }
+    }
+
     return result;
 }

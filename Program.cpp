@@ -15,6 +15,8 @@ Program::Program()
 {
     m_algMap.insert(std::make_pair("-rle", &Compress::rle));
     m_algMap.insert(std::make_pair("-RLE", &Compress::rle));
+    m_algMap.insert(std::make_pair("-drle", &Compress::drle));
+    m_algMap.insert(std::make_pair("-dRLE", &Compress::drle));
 }
 
 Program::~Program()
@@ -41,6 +43,7 @@ void Program::handleInputArgs(int argc, char **argv)
             std::cout << "\t---------------------------------------" << std::endl;
             std::cout << "Available algorithm list:" << std::endl;
             std::cout << "'-rle' or '-RLE' : run-length encoding" << std::endl;
+            std::cout << "'-drle' or '-dRLE' : run-length encoding (decompress)" << std::endl;
         }
         else
         {

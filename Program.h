@@ -2,6 +2,7 @@
 #include <fstream>
 #include <functional>
 #include <map>
+
 #include "Compress.h"
 
 class Program
