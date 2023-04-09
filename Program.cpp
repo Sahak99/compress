@@ -11,41 +11,74 @@ void Program::run(int argc, char **argv)
     handleAlgExecution();
 }
 
+Program::Program()
+{
+    m_algMap.insert(std::make_pair("-rle", &Compress::rle));
+    m_algMap.insert(std::make_pair("-RLE", &Compress::rle));
+}
+
+Program::~Program()
+{
+    if (m_ifs.is_open())
+    {
+        m_ifs.close();
+    }
+    if (m_ofs.is_open())
+    {
+        m_ofs.close();
+    }
+}
+
 void Program::handleInputArgs(int argc, char **argv)
 {
-    for (int i = 1; i < argc; ++i)
+
+    if (argc == 2)
     {
-        if (i == 1 && std::to_string(argv[i][0]) != std::to_string('-'))
+        if (std::string(argv[1]) == "-help")
         {
-            m_inputFile = std::string(argv[i]);
-            continue;
+            std::cout << "Use this argument format:" << std::endl;
+            std::cout << "[input_file_name] [output_file_name] -[algorithm_name]" << std::endl;
+            std::cout << "\t---------------------------------------" << std::endl;
+            std::cout << "Available algorithm list:" << std::endl;
+            std::cout << "'-rle' or '-RLE' : run-length encoding" << std::endl;
         }
-        if (i == 2 && std::to_string(argv[i][0]) != std::to_string('-'))
+        else
         {
-            m_outputFile = std::string(argv[i]);
-            continue;
+            std::cout << "Please use '-help' for info" << std::endl;
         }
-        if (std::to_string(argv[i][0]) == std::to_string('-'))
-        {
-            m_algorithm = std::string(argv[i]);
-        }
+        return;
     }
+    if (argc == 3)
+    {
+        m_inputFile = argv[1];
+        m_outputFile = argv[2];
+        m_algorithm = "-rle";
+        return;
+    }
+
+    if (argc == 4)
+    {
+        m_inputFile = argv[1];
+        m_outputFile = argv[2];
+        m_algorithm = argv[3];
+        return;
+    }
+
+    std::cout << "Incorrect argument format, please use '-help' for info" << std::endl;
 }
 
 void Program::handleAlgExecution()
 {
-    if (m_algorithm == "-rle" || m_algorithm == "-RLE")
-    {
-        for (std::string inputLine; std::getline(m_ifs, inputLine);)
-        {
-            std::string outputLine = executeAlg(&Compress::rle, inputLine);
-            m_ofs << outputLine << std::endl;
-        }
-        return;
-    }
+    executeAlg(m_algMap[m_algorithm], m_ifs, m_ofs);
 }
 
-std::string Program::executeAlg(std::function<const std::string(const std::string &)> func, const std::string &str)
+void Program::executeAlg(std::function<const std::string(const std::string &)> func,
+                         std::ifstream &ifs,
+                         std::ofstream &ofs)
 {
-    return func(str);
+    for (std::string inputLine; std::getline(ifs, inputLine);)
+    {
+        std::string outputLine = func(inputLine);
+        ofs << outputLine << std::endl;
+    }
 }
